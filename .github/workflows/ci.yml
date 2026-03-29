@@ -3,6 +3,8 @@ name: CI Pipeline
 on: 
   push:
     branches: [main]
+  release:
+    types: [published]
 
 jobs:
     ci: 
@@ -19,6 +21,7 @@ jobs:
             uses: actions/setup-python@v5 
             with:
               python-version: '3.13'
+
           - name: Install dependencies
             run: pip install -r requirements.txt
 
@@ -31,5 +34,34 @@ jobs:
               DB_PORT: "5432"
             run: pytest tests/ -v
 
+          - name: Get tag or SHA
+            id: tag
+            uses: GuillaumeFalourd/get-release-or-tag@v2 
+
           - name: Run lint
             run: ruff check app.py tests/
+
+          - name: Docker login to GHCR
+            uses: docker/login-action@3
+            with:
+              registry: ghcr.io
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+
+          - name: Build and push backend
+            uses: docker/build-push-action@5
+            with:
+              context: .
+              push: true
+              tags: |
+                ghcr.io/nikolayzdravkov/devops-site-backend:latest
+                ghcr.io/nikolayzdravkov/devops-site-backend:${{ steps.tag.outputs.tag }}
+
+          - name: Build and push frontend
+            uses: docker/build-push-action@5
+            with:
+              context: ./frontend
+              push: true
+              tags: |
+                 ghcr.io/nikolayzdravkov/devops-site-frontend:latest
+                 ghcr.io/nikolayzdravkov/devops-site-frontend:${{ steps.tag.outputs.tag }}
