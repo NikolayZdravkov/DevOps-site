@@ -1,5 +1,7 @@
+const API_URL = window.API_URL || "http://localhost:5000";
+
 // Health check — colour the nav dot
-fetch("/api/health")
+fetch(`${API_URL}/api/health`)
   .then(r => r.ok ? r.json() : Promise.reject())
   .then(() => {
     const dot = document.getElementById("status-dot");
@@ -23,7 +25,7 @@ document.getElementById("contact-form").addEventListener("submit", async e => {
   };
 
   try {
-    const res = await fetch("/api/contact", {
+    const res = await fetch(`${API_URL}/api/contact`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
