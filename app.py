@@ -1,6 +1,6 @@
 from flask import Flask
 from backend.config import Config
-from backend.extensions import db
+from backend.extensions import db, migrate
 from backend.routes.health import health_bp
 from backend.routes.contact import contact_bp
 
@@ -10,9 +10,7 @@ def create_app(config=None):
     app.config.from_object(config or Config)
 
     db.init_app(app)
-
-    with app.app_context():
-        db.create_all()
+    migrate.init_app(app, db)
 
     app.register_blueprint(health_bp)
     app.register_blueprint(contact_bp)

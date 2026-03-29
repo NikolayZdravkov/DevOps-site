@@ -9,10 +9,36 @@ spec:
     matchLabels:
       app: backend
   template:
-    metadata: 
+    metadata:
       labels:
         app: backend
     spec:
+      initContainers:
+        - name: db-migrate
+          image: ghcr.io/nikolayzdravkov/devops-site-backend:latest
+          command: ["flask", "db", "upgrade"]
+          env:
+            - name: FLASK_APP
+              value: app.py
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: postgres_user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: db_password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: postgres_db
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
       containers:
         - name: backend
           image: ghcr.io/nikolayzdravkov/devops-site-backend:latest
@@ -38,4 +64,3 @@ spec:
               value: postgres
             - name: DB_PORT
               value: "5432"
-
