@@ -24,7 +24,11 @@ jobs:
 
           - name: Run tests
             env:
-              DATABASE_URL: "sqlite:///:memory:"
+              POSTGRES_USER: test
+              DB_PASSWORD: test
+              POSTGRES_DB: test
+              DB_HOST: localhost
+              DB_PORT: "5432"
             run: pytest tests/ -v
 
           - name: Run lint

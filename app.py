@@ -5,9 +5,9 @@ from backend.routes.health import health_bp
 from backend.routes.contact import contact_bp
 
 
-def create_app():
+def create_app(config=None):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config or Config)
 
     db.init_app(app)
 
