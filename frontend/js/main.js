@@ -1,4 +1,4 @@
-const API_URL = window.API_URL || "http://localhost:5000";
+const API_URL = window.API_URL || "";
 
 // Health check — colour the nav dot
 fetch(`${API_URL}/api/health`)
