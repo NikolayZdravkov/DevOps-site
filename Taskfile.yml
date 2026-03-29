@@ -23,3 +23,10 @@ tasks:
     desc: Run Ruff linting
     cmds:  
       - venv/bin/ruff check app.py tests/
+
+  cluster-up:
+    desc:  Recreate Kind cluster and apply all manifests
+    cmds:
+      - kind delete cluster --name devops-site || true
+      - kind create cluster --name devops-site --config=kind-config.yml
+      - bash scripts/setup-cluster.sh
