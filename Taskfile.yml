@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+
+tasks:
+  install:
+    desc: Install dependencies
+    cmds:
+      - venv/bin/pip install -r requirements.txt
+
+  run:
+    desc: Start the Flask app
+    cmds:
+      - venv/bin/python app.py
+
+  test:
+    desc: Run Pytest tests
+    cmds:
+      - venv/bin/pytest tests/ -v
+    
+  lint:
+    desc: Run Ruff linting
+    cmds:  
+      - venv/bin/ruff check app.py tests/

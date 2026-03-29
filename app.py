@@ -1,10 +1,10 @@
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 from flask import Flask, render_template, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 
 app = Flask(__name__)
 

@@ -1,0 +1,29 @@
+name: CI Pipeline
+
+on: 
+  push:
+    branches: [main]
+
+jobs:
+    ci: 
+        runs-on: ubuntu-latest
+
+        permissions: 
+            contents: read
+            packages: write
+
+        steps:
+          - uses: actions/checkout@v4
+
+          - name: Setup Python
+            uses: actions/setup-python@v5 
+            with:
+              python-version: '3.13'
+          - name: Install dependencies
+            run: task install
+
+          - name: Run tests
+            run: task test
+
+          - name: Run lint
+            run: task lint
