@@ -11,6 +11,9 @@ def create_app(config=None):
 
     db.init_app(app)
 
+    with app.app_context():
+        db.create_all()
+
     app.register_blueprint(health_bp)
     app.register_blueprint(contact_bp)
 
@@ -19,6 +22,4 @@ def create_app(config=None):
 
 if __name__ == "__main__":
     app = create_app()
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
